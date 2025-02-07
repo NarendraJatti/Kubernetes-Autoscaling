@@ -1,8 +1,29 @@
 Manual HPA
 =========
 
+tradtional hpa metrics>>cpu and memory usage>>default cpu utilization checks every   15secs
+advanced hpa metrics>>custom metrics(pulls metrics from another app or another object inside the cluster) or external metrics(external data soruce-collected tthough adapter)
 
 kubectl scale deployment flask-web-app --replicas=3
+
+HPA uses the Kubernetes API to retrieve the metrics (e.g., CPU/memory) required to make scaling decisions.
+HPA communicates with the API server to adjust the number of pod replicas in a deployment by updating the desired replica count.
+API Server coordinates the requests to scale the pods by interacting with the Controller Manager, which schedules and manages the pod lifecycle..
+
+3. Metrics Server/Collection:
+The Metrics Server is the Kubernetes component responsible for collecting resource metrics from the nodes in the cluster. It collects CPU and memory usage statistics, which are used by HPA for scaling decisions.
+
+Metrics Server queries the Kubelet running on each node to gather resource usage statistics (CPU, memory).
+This data is stored temporarily and exposed through the Kubernetes API as resource metrics.
+HPA accesses this metrics data via the Kubernetes API to determine whether the number of pods should be increased or decreased.
+
+Flow Summary:
+Metrics Server collects resource metrics (e.g., CPU/memory) from the nodes.
+These metrics are exposed through the Kubernetes API.
+HPA queries the API Server to access the current metrics of the pods.
+HPA determines the appropriate scaling action (increase/decrease pod replicas) based on the metrics data.
+HPA updates the desired replica count by interacting with the Kubernetes API Server.
+API Server adjusts the number of pods accordingly by instructing the scheduler and controllers to add/remove pods.
 
 Who Handles Load Balancing?
 Service (NodePort): If you're directly accessing the NodePort, the Kubernetes service itself will handle load balancing between the pods.

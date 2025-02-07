@@ -1,0 +1,76 @@
+If the VPA recommendations are not monitored or applied correctly, it could lead to resource settings that either over-provision (wasting resources) or under-provision (causing performance degradation) the application.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      initContainers:
+      - name: init-sleep
+        image: busybox
+        command: ["sleep", "30"]
+      containers:
+      - name: flask
+        image: rakshithraka/flask-web-app
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+           memory: "128Mi"
+           cpu: "100m"
+          limits:
+           memory: "256Mi"
+           cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-web-app-service
+spec:
+  type: ClusterIP
+  selector:
+    app: flask-app
+  ports:
+   - port: 80
+     targetPort: 80    
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      initContainers:
+      - name: init-sleep
+        image: busybox
+        command: ["sleep", "30"]
+      containers:
+      - name: flask
+        image: rakshithraka/flask-web-app
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+           memory: "256Mi"               #edited
+           cpu: "200m"                   #edited
+          limits:
+           memory: "380Mi"               #edited
+           cpu: "300m"                   #edited
