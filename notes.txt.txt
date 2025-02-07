@@ -8,5 +8,7 @@ scaling
 
 role of karpenter in scaling
 
-1)horizontal Pod autoscaler
-
+k8 scaling
+==========
+cluster scaling>>>worker node scaling
+pod scaling>pod,deployment,statefulset scaling
