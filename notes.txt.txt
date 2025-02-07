@@ -1,0 +1,12 @@
+scaling
+==========
+1)horizontal Pod autoscaler
+2)vertival Pod autoscaler
+3)cluster proportional autoscaler
+4) K8 event driven autoscaling
+5)cluster autoscaler(karpenter) (not discussed)
+
+role of karpenter in scaling
+
+1)horizontal Pod autoscaler
+
