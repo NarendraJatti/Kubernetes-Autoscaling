@@ -1,0 +1,65 @@
+Installation of metric service and explore the manifest file and certificate requirement
+
+kubectl logs -n kube-system metrics-server-548b7d8875-ftmbx
+
+kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes"
+
+The errors show that the metrics server cannot retrieve metrics from nodes because the TLS certificates on the nodes lack the necessary IP Subject Alternative Names (SANs). This prevents certificate validation and secure connections.
+
+kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes"
+kubectl top nodes
+kubectl top pods
+
+kubectl edit deploy -n kube-system metrics-server
+
+Objectives
+
+HPA with Imperative commands
+Requirements for HPA to work
+What happens when resources.limit is not mentioned
+
+kubectl autoscale deployment nginx-deployment --max=3 --cpu-percent=80
+
+kubectl get hpa
+kubectl describe hpa nginx-deployment
+kubectl get hpa --watch
+
+kubectl events hpa nginx-deployment | grep -i "ScalingReplicaSet"
+
+kubectl events hpa nginx-deployment | grep -i "FailedGetResourceMetric"
+
+Since the HPA was failing due to the resource field missing in the nginx-deployment, the resource field has been updated in /root/deployment.yml. Update the nginx-deployment using this manifest. Watch the changes made to the nginx-deployment by the HPA after upgrading by using the kubectl get hpa --watch command
+
+Objectives
+
+Expose Metrics: From your application
+Deploy Prometheus: To scrape those metrics
+Install Prometheus Adapter: To expose the metrics to Kubernetes
+
+Business Logic Example for External Metrics Scaling: Scaling Based on Real-Time Order Data
+
+Scenario: You are running an e-commerce platform that experiences varying traffic throughout the day. During promotional events or flash sales, you need to dynamically scale your backend services to handle the surge in orders and customer interactions. The scaling should be based on real-time sales data, such as the number of completed orders.
+
+Update the order number to 2000. Use the following command:
+
+curl -X POST -H "Content-Type: application/json" -d '{"orders": 2000}' http://controlplane:31080/orders
+
+
+Check the order number status using the following command:
+
+kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/default/order_count" | jq
+
+Note: Prometheus takes time to scrape metrics at regular intervals.
+
+kubectl describe hpa flask-dispatch-hpa 
+
+Scale down the configuration by setting the order number to 0. Use the following command:
+
+curl -X POST -H "Content-Type: application/json" -d '{"orders": 0}' http://controlplane:31080/orders
+
+
+Check the order number status using the following command:
+
+kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/default/order_count" | jq
+
+Note: Prometheus takes time to scrape metrics at regular intervals.

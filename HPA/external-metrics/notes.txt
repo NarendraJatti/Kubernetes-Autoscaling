@@ -1,0 +1,26 @@
+We'll demonstrate how to scale a Kubernetes Deployment based on the number of messages in a RabbitMQ queue. The setup involves:
+
+RabbitMQ: A message queue to monitor
+Prometheus: To scrape metrics from RabbitMQ
+Prometheus Adapter: To expose those metrics as external metrics to Kubernetes
+Horizontal Pod Autoscaler (HPA): To scale the deployment based on the metrics exposed by Prometheus
+
+Verify if Prometheus Adapter is returning the correct value. Use the following command:
+
+kubectl get --raw /apis/external.metrics.k8s.io/v1beta1
+
+or
+
+kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1/namespaces/default/pods/
+
+kubectl get hpa rabbitmq-consumer-hpa --watch
+
+The stabilizationWindowSeconds in a Kubernetes Horizontal Pod Autoscaler (HPA) is a setting that helps control how the HPA reacts to rapid changes in resource usage (such as CPU or memory). It prevents the HPA from scaling up or down too quickly in response to fluctuations in the metric values, providing a stabilization period before the HPA can trigger scaling events.
+
+Explanation:
+Purpose: The stabilization window provides a cooldown period during which the HPA will not take any further scaling actions (either up or down) even if the metric values have changed. This helps prevent frequent, unnecessary scaling events, which can lead to instability and inefficiency in your application.
+
+How it works:
+
+When a scaling action is triggered (i.e., the HPA decides to scale up or down), Kubernetes will wait for the duration of the stabilizationWindowSeconds before allowing another scaling event, even if the metrics show that further scaling is required.
+This ensures that temporary fluctuations in resource usage do not cause the system to scale unnecessarily.

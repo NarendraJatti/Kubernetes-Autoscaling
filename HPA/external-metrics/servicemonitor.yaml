@@ -1,0 +1,31 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations:
+    meta.helm.sh/release-name: rabbitmq
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2025-02-08T05:36:20Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/instance: rabbitmq
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: rabbitmq
+    app.kubernetes.io/version: 4.0.5
+    helm.sh/chart: rabbitmq-15.2.5
+    release: prometheus-operator
+  name: rabbitmq
+  namespace: default
+  resourceVersion: "7481"
+  uid: 90789e20-cb91-4356-82bd-e835d5cf0697
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+  jobLabel: ""
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: rabbitmq
+      app.kubernetes.io/name: rabbitmq

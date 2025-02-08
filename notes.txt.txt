@@ -1,3 +1,5 @@
+aggressively scaling UP and conservatively scaling down
+
 scaling
 ==========
 1)horizontal Pod autoscaler
