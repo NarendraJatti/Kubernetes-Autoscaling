@@ -1,0 +1,45 @@
+KEDA is primarily focused on scaling Kubernetes workloads based on external event triggers, such as message queues, databases, or external metrics, rather than internal metrics like CPU or memory.
+
+KEDA supports a variety of event sources, including AWS SQS, RabbitMQ, and Prometheus among others, allowing it to scale based on various external event types.
+
+
+KEDA scales Kubernetes deployments by integrating with the Horizontal Pod Autoscaler (HPA) and triggering scaling events based on external metrics and events rather than just internal ones like CPU or memory usage.
+
+The services deployed by KEDA:
+
+keda-admission-webhooks
+keda-operator
+keda-operator-metrics-apiserver
+
+keda use HPA-scale pods>cpu usage
+
+kubectl get apiservice -o custom-columns=NAME:.metadata.name,LABELS:.metadata.labels | grep keda
+
+keda cron-predetermined scaling>scale pods to specific number>specific period
+
+will configure KEDA to dynamically scale a Kubernetes deployment based on CPU utilization, leveraging KEDA's integration with the Horizontal Pod Autoscaler (HPA).
+
+kubectl describe hpa keda-hpa-cpu-app-scaledobject
+
+kubectl describe hpa keda-hpa-cpu-app-scaledobject | grep -i "Reason" | head -n 1 > /root/reason
+
+
+kubectl describe hpa keda-hpa-nginx-cron-scaler
+
+  echo "amhibm9pdWhramo=" | base64 -d 
+
+kubectl get pods -l app=nginx
+
+  kubectl run redis-cli --image=redis --restart=Never
+  kubectl exec -it redis-cli -- bash
+      for i in {1..10}; do redis-cli -h redis -p 6379 -a jhbnoiuhkjj RPUSH mylist "item$i" 2>/dev/null; done
+redis-cli -h redis -p 6379 -a jhbnoiuhkjj del mylist 2>/dev/null
+
+The HPA looks at a specific target metric (e.g., number of items in Redis) and only acts when the metric meets or exceeds the target value. The value 10/10 indicates that the desired state is 10, and once that is met, the HPA starts scaling. Even if Redis had fewer items earlier (like 2 items), the scaling only activates when the item count reaches or surpasses the threshold (in this case, 10).
+
+kubectl describe hpa keda-hpa-redis-scaledobject
+
+Here's a breakdown of what this means:
+
+2 current pods: This is the actual number of pods that are currently running.
+4 desired pods: This is the target number of pods that the HPA has calculated based on the external metric (s0-redis-mylist). The external metric target is 10, but the current value has been exceeding this threshold (e.g., 20/10), which is why the HPA has decided to increase the number of replicas to 4.
